@@ -66,6 +66,24 @@ button.primary-btn:active {
     box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.3);
 }
 
+/* Validation text design */
+.text {
+    color: var(--text-table);
+    font-size: 13px;
+}
+
+.text-warning {
+    color: var(--primary-color)
+}
+
+.text-danger {
+    color: darkred
+}
+
+.text-success {
+    color: darkgreen
+}
+
 
 
 

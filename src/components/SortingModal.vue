@@ -12,24 +12,31 @@ defineEmits(['close'])
 </script>
 
 <template>
-  <div v-if="isModalOpen" class="modal-wrap">
+  <div
+      v-if="isModalOpen"
+      class="modal-wrap"
+      role="dialog"
+      aria-labelledby="modal-title"
+      aria-describedby="modal-desc"
+  >
     <div class="modal b-shadow">
       <div class="modal-header">
-        <h2 class="modal-title">How many people?</h2>
-        <IconCross @click="$emit('close')"/>
+        <h2 id="modal-title" class="modal-title">How many people?</h2>
+        <!-- Add aria-label for accessibility -->
+        <button @click="$emit('close')" class="close-btn" aria-label="Close modal">
+          <IconCross/>
+        </button>
       </div>
       <div class="modal-body">
         <div class="sorting-form">
-          <label>Enter a number of how many people you want to add to the list.</label>
+          <label id="modal-desc">Enter a number of how many people you want to add to the list.</label>
           <input
               type="number"
               min="20"
               max="100"
               class="w-full p-2 border rounded"
           />
-          <!--          <div class="text text-warning">Minimum number should be 20</div>-->
-          <!--          <div class="text text-danger">Maximum number should be 100</div>-->
-          <!--          <div class="text text-success">Maximum number should be 100</div>-->
+          <!--          <div class="text text-warning">How are you?</div>-->
         </div>
       </div>
       <div class="modal-footer">
@@ -40,11 +47,13 @@ defineEmits(['close'])
   </div>
 </template>
 
+
 <style scoped>
+/* General modal styles */
 .modal-wrap {
   display: flex;
-  inset: 0;
   position: fixed;
+  inset: 0;
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.7);
@@ -53,9 +62,12 @@ defineEmits(['close'])
 
 .modal {
   background-color: white;
-  width: 27.313rem;
+  width: 90%; /* Use percentage for responsiveness */
+  max-width: 500px; /* Limit the modal width on larger screens */
   border-radius: 0.2rem;
   animation: fadeIn 0.3s ease;
+  padding: 1rem; /* Add padding for mobile devices */
+  box-sizing: border-box;
 }
 
 @keyframes fadeIn {
@@ -69,62 +81,90 @@ defineEmits(['close'])
   }
 }
 
-.modal-wrap .modal .modal-header {
-  padding: 1rem;
-  border-bottom: 2px solid var(--border-color);
+/* Header */
+.modal-header {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
   align-items: center;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-.modal-wrap .modal .modal-header .modal-title {
+.modal-title {
   color: black;
   font-size: 1.125rem;
   font-weight: bold;
-
 }
 
-.modal-wrap .modal .modal-body {
-  padding: 1rem 1rem 3.5rem;
-  border-bottom: 2px solid var(--border-color);
+.close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
 }
 
-.modal-wrap .modal .modal-body .sorting-form label {
+.close-btn:focus {
+  outline: 2px solid var(--primary-color); /* Add focus outline */
+}
+
+/* Body */
+.modal-body {
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #Eee;
+  padding-bottom: 2.5rem;
+}
+
+.sorting-form label {
   color: var(--text-table);
-  font-size: 13px;
+  font-size: 0.875rem;
   margin-bottom: 0.5rem;
-  display: inline-block;
+  display: block;
 }
 
-.modal-wrap .modal .modal-body .sorting-form input {
+.sorting-form input {
   border: 1px solid var(--border-color);
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.2rem;
   margin-bottom: 0.5rem;
 }
 
-.modal-wrap .modal .modal-footer {
-  padding: 1rem;
+/* Footer */
+.modal-footer {
   display: flex;
-  gap: 1rem;
   justify-content: flex-end;
+  gap: 0.5rem;
 }
 
-/* Validation text design */
-.text {
-  color: var(--text-table);
-  font-size: 13px;
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.2rem;
+  cursor: pointer;
+  border: none;
 }
 
-.text-warning {
-  color: var(--primary-color)
+.primary-btn {
+  background-color: var(--primary-color);
+  color: white;
 }
 
-.text-danger {
-  color: darkred
+.primary-btn:hover {
+  background-color: var(--primary-color);
 }
 
-.text-success {
-  color: darkgreen
-}
+/* Responsive Design */
+@media (max-width: 640px) {
+  .modal {
+    width: 100%; /* Full width on mobile */
+    max-width: none;
+    margin: 0 1rem; /* Add horizontal margin */
+  }
 
+  .modal-footer {
+    flex-direction: column; /* Stack buttons on smaller screens */
+    gap: 0.75rem;
+  }
+}
 </style>
+

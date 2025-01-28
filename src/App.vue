@@ -19,123 +19,138 @@ const closeModal = () => {
 </script>
 
 <template>
-  <header class="">
+  <header class="header-section">
     <div class="container">
       <div class="title-section">
         <h2>Sorting Training System</h2>
-        <button @click="openModal" class="btn primary-btn">Start sorting!</button>
+        <button @click="openModal" class="btn primary-btn">Start Sorting!</button>
       </div>
     </div>
   </header>
+
   <main class="container">
-    <div class="table-card b-shadow">
+    <section class="table-card b-shadow">
       <div class="table-card-head">
-        <strong>20 people in the list </strong>
+        <strong>20 people in the list</strong>
       </div>
       <div class="table-card-body">
-        <table>
-          <thead>
-          <tr>
-            <th>Email</th>
-            <th>Potatoes</th>
-            <th>Tags</th>
-            <th>Full name</th>
-            <th>Location</th>
-          </tr>
-          </thead>
-
-          <tbody>
-          <tr>
-            <td>
-              <div class="checkbox-wrap">
-                <div class="checkbox">
-                  <input type="checkbox" checked="checked" id="vehicle1" name="vehicle1" value="Bike">
-                  <label for="vehicle1"> juozas@bybosas.lt</label>
+        <!-- Responsive table wrapper -->
+        <div class="table-responsive">
+          <table>
+            <thead>
+            <tr>
+              <th>Email</th>
+              <th>Potatoes</th>
+              <th>Tags</th>
+              <th>Full Name</th>
+              <th>Location</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Example row -->
+            <tr>
+              <td>
+                <div class="checkbox-wrap">
+                  <div class="checkbox">
+                    <input
+                        type="checkbox"
+                        id="email1"
+                        name="email1"
+                        value="user1"
+                    />
+                    <label for="email1">juozas@bybosas.lt</label>
+                  </div>
+                  <IconCaret class="icon-caret"/>
                 </div>
-                <IconCaret class="icon-caret"/>
-              </div>
-            </td>
-            <td>10</td>
-            <td><span class="chip-gray">Customers</span></td>
-            <td>Juozas Bybosas</td>
-            <td>Lithuania</td>
-          </tr>
-          <tr class="table-active">
-            <td>
-              <div class="checkbox-wrap">
-                <div class="checkbox">
-                  <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-                  <label for="vehicle1"> juozas@bybosas.lt</label>
+              </td>
+              <td>10</td>
+              <td><span class="chip-gray">Customers</span></td>
+              <td>Juozas Bybosas</td>
+              <td>Lithuania</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="checkbox-wrap">
+                  <div class="checkbox">
+                    <input
+                        type="checkbox"
+                        id="email1"
+                        name="email1"
+                        value="user1"
+                    />
+                    <label for="email1">juozas@bybosas.lt</label>
+                  </div>
+                  <IconCaret class="icon-caret"/>
                 </div>
-                <IconCaret class="icon-caret"/>
-              </div>
-            </td>
-            <td>10</td>
-            <td><span class="chip-gray">Customers</span></td>
-            <td>Juozas Bybosas</td>
-            <td>Lithuania</td>
-          </tr>
-          <tr>
-            <td>
-              <div class="checkbox-wrap">
-                <div class="checkbox">
-                  <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-                  <label for="vehicle1"> juozas@bybosas.lt</label>
+              </td>
+              <td>10</td>
+              <td><span class="chip-gray">Customers</span></td>
+              <td>Juozas Bybosas</td>
+              <td>Lithuania</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="checkbox-wrap">
+                  <div class="checkbox">
+                    <input
+                        type="checkbox"
+                        id="email1"
+                        name="email1"
+                        value="user1"
+                    />
+                    <label for="email1">juozas@bybosas.lt</label>
+                  </div>
+                  <IconCaret class="icon-caret"/>
                 </div>
-                <IconCaret class="icon-caret"/>
-              </div>
-            </td>
-            <td>10</td>
-            <td>
-              <span class="chip-gray">Customers</span>
-              <span class="chip-gray">VIP</span>
-            </td>
-            <td>Juozas Bybosas</td>
-            <td>Lithuania</td>
-          </tr>
-
-          </tbody>
-
-
-        </table>
+              </td>
+              <td>10</td>
+              <td><span class="chip-gray">Customers</span></td>
+              <td>Juozas Bybosas</td>
+              <td>Lithuania</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    </section>
   </main>
 
-  <SortingModal :isModalOpen="isModalOpen" @close="closeModal" />
-
+  <SortingModal :isModalOpen="isModalOpen" @close="closeModal"/>
 </template>
 
+
 <style scoped>
+/* General container styles */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Title Section */
 .title-section {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin: 2rem 0;
   gap: 1rem;
-  margin: 36px 0;
-
-  //border: 1px solid black;
 }
 
 .title-section h2 {
-  font-size: 32px;
+  font-size: 2rem;
+  line-height: 2.5rem;
   font-weight: bold;
   color: black;
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* Card of table */
+/* Table Card */
 .table-card {
   background-color: white;
-  padding-bottom: 50px;
-  border-radius: 4px;
+  padding-bottom: 3.125rem;
+  border-radius: 0.25rem;
 }
 
-.table-card .table-card-head {
+.table-card-head {
   text-align: right;
   padding: 1rem;
 }
@@ -145,63 +160,65 @@ const closeModal = () => {
   font-size: 14px;
 }
 
-/* Table design */
+/* Table Styles */
+.table-responsive {
+  overflow-x: auto; /* Add horizontal scrolling for small screens */
+}
 
 table {
   width: 100%;
-  text-align: left;
+  border-collapse: collapse;
   background-color: white;
+  text-align: left;
+  font-size: 0.875rem;
 }
 
-table, th, td {
+table th,
+table td {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+thead th {
   border-top: 1px solid var(--border-color);
   padding: 0.5rem 1rem;
-  //color: red;
   color: var(--text-table);
   font-size: 14px;
   font-weight: 400;
-
 }
 
-table tbody tr > td {
-  color: black
-}
-
-table tbody > tr:last-child {
-  border-bottom: 1px solid var(--border-color);
-}
-
-table thead > tr > th:first-child {
+thead th:first-child {
   border-right: 1px solid var(--border-color);
 }
 
-table tbody > tr > td:first-child {
-  border-right: 1px solid var(--border-color);
+tbody tr > td {
+  color: black;
 }
 
-table tbody > tr:hover {
+tbody tr:hover {
   background-color: var(--bg-gray);
 }
 
-td > .checkbox-wrap {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
+tbody tr.table-active {
+  background-color: var(--bg-gray);
 }
 
-td > .checkbox-wrap .checkbox {
-  display: table;
+tbody td:first-child {
+  border-right: 1px solid var(--border-color);
 }
 
-td > .checkbox-wrap .checkbox input, td > .checkbox-wrap .checkbox label {
-  cursor: pointer;
+tbody tr:last-child td {
+  border-bottom: 1px solid var(--border-color);
 }
 
-td > .checkbox-wrap .checkbox input {
-  display: table-cell;
-  vertical-align: middle;
-  margin-right: 1rem;
+.chip-gray {
+  display: inline-block;
+  background-color: var(--chip-gray);
+  color: var(--text-table);
+  font-size: 0.75rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  margin-right: 0.25rem;
 }
 
 .icon-caret {
@@ -212,27 +229,19 @@ td > .checkbox-wrap .checkbox input {
   padding: 3px 5px;
 }
 
-.chip-gray {
-  color: var(--text-table);
-  background-color: var(--chip-gray);
-  margin: 5px;
-  padding: 5px 8px;
-  border-radius: 20px;
-  font-size: 13px;
+/* Checkbox Styles */
+.checkbox-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.table-active {
-  background-color: var(--bg-gray);
+.checkbox input[type="checkbox"] {
+  display: none; /* Hide native checkbox */
 }
 
-/* Checkbox design */
-/* Hide the native checkbox */
-.checkbox-wrap .checkbox input[type="checkbox"] {
-  display: none;
-}
-
-/* Custom checkbox box */
-.checkbox-wrap .checkbox label {
+.checkbox label {
   position: relative;
   padding-left: 30px;
   cursor: pointer;
@@ -240,8 +249,7 @@ td > .checkbox-wrap .checkbox input {
   line-height: 20px;
 }
 
-/* Create the checkbox box */
-.checkbox-wrap .checkbox label::before {
+.checkbox label::before {
   content: '';
   position: absolute;
   top: 0;
@@ -250,36 +258,47 @@ td > .checkbox-wrap .checkbox input {
   height: 20px;
   border: 2px solid #aaa;
   border-radius: 4px;
-  background-color: #fff;
+  background-color: white;
   transition: all 0.2s;
 }
 
-/* Add the custom checkmark (tick) */
-.checkbox-wrap .checkbox label::after {
+.checkbox label::after {
   content: '';
   position: absolute;
   top: 3px;
   left: 7px;
   width: 6px;
   height: 12px;
-  border: solid white; /* Color of the tick */
+  border: solid white;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
   opacity: 0;
   transition: opacity 0.2s;
 }
 
-/* When checkbox is checked */
-.checkbox-wrap .checkbox input[type="checkbox"]:checked + label::before {
+.checkbox input[type="checkbox"]:checked + label::before {
   border-color: var(--primary-color);
   background-color: var(--primary-color);
 }
 
-.checkbox-wrap .checkbox input[type="checkbox"]:checked + label::after {
+.checkbox input[type="checkbox"]:checked + label::after {
   opacity: 1;
 }
 
-.display-none {
-  display: none;
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .title-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .table-card-head {
+    text-align: left;
+  }
+
+  .chip-gray {
+    margin-bottom: 0.5rem;
+  }
 }
 </style>
+
