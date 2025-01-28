@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+:root {
+    --font-primary: "Roboto", serif;
+
+    --bg-gray: #f5f5f5;
+    --primary-color: #FF8D00;
+    --border-color: #dddddd;
+    --text-table: #555555;
+    --chip-gray: #eeeeee;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+*, *:before, *:after, body {
+    font-family: var(--font-primary);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-gray);
+    color: var(--text-table);
+}
+
+.btn {
+    color: var(--text-table);
+    background-color: transparent;
+    padding: 0.5rem 1.5rem;
+    font-size: 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: var(--border-color);
+}
+
+button.primary-btn {
+    color: white;
+    background-color: var(--primary-color);
+}
+
+button.primary-btn:hover {
+    background-color: #e57a00;
+}
+
+button.primary-btn:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+button.primary-btn:active {
+    background-color: #cc6d00;
+}
+
+/* Box shadow */
+.b-shadow {
+    -webkit-box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.3);
+}
+
+
+
+
