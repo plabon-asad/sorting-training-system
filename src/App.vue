@@ -3,18 +3,26 @@
 import IconCaret from "./components/icons/IconCaret.vue";
 import SortingModal from "./components/SortingModal.vue";
 import {ref} from "vue";
+import NoDataFound from "./components/NoDataFound.vue";
+import {generatePeople} from './utils/personGenerator';
 
-// Reactive state to control modal
 const isModalOpen = ref(false);
+const people = ref([]);
+const selectedPeople = ref<number[]>([]);
 
-// Function to open modal
 const openModal = () => {
   isModalOpen.value = true;
 };
 
-// Function to close modal
 const closeModal = () => {
   isModalOpen.value = false;
+}
+
+// Function to start sorting and generate people
+const startSorting = (count) => {
+  // debugger
+  people.value = generatePeople(count);
+  closeModal();
 }
 </script>
 
@@ -25,16 +33,19 @@ const closeModal = () => {
         <h2>Sorting Training System</h2>
         <button @click="openModal" class="btn primary-btn">Start Sorting!</button>
       </div>
+
     </div>
   </header>
 
   <main class="container">
     <section class="table-card b-shadow">
+
       <div class="table-card-head">
-        <strong>20 people in the list</strong>
+        <strong>{{people.length}} people in the list</strong>
+<!--        <strong>{{ selectedPeople }}</strong>-->
       </div>
-      <div class="table-card-body">
-        <!-- Responsive table wrapper -->
+
+      <div class="table-card-body" v-show="people.length > 0">
         <div class="table-responsive">
           <table>
             <thead>
@@ -48,74 +59,37 @@ const closeModal = () => {
             </thead>
             <tbody>
             <!-- Example row -->
-            <tr>
+            <tr v-for="person in people" :key="person.id">
               <td>
                 <div class="checkbox-wrap">
                   <div class="checkbox">
                     <input
+                        v-model="selectedPeople"
                         type="checkbox"
-                        id="email1"
-                        name="email1"
-                        value="user1"
+                        :id="`person-${person.potatoes}`"
+                        :value="person.potatoes"
                     />
-                    <label for="email1">juozas@bybosas.lt</label>
+                    <label :for="`person-${person.potatoes}`">{{ person.email }}</label>
                   </div>
                   <IconCaret class="icon-caret"/>
                 </div>
               </td>
-              <td>10</td>
-              <td><span class="chip-gray">Customers</span></td>
-              <td>Juozas Bybosas</td>
-              <td>Lithuania</td>
-            </tr>
-            <tr>
-              <td>
-                <div class="checkbox-wrap">
-                  <div class="checkbox">
-                    <input
-                        type="checkbox"
-                        id="email1"
-                        name="email1"
-                        value="user1"
-                    />
-                    <label for="email1">juozas@bybosas.lt</label>
-                  </div>
-                  <IconCaret class="icon-caret"/>
-                </div>
-              </td>
-              <td>10</td>
-              <td><span class="chip-gray">Customers</span></td>
-              <td>Juozas Bybosas</td>
-              <td>Lithuania</td>
-            </tr>
-            <tr>
-              <td>
-                <div class="checkbox-wrap">
-                  <div class="checkbox">
-                    <input
-                        type="checkbox"
-                        id="email1"
-                        name="email1"
-                        value="user1"
-                    />
-                    <label for="email1">juozas@bybosas.lt</label>
-                  </div>
-                  <IconCaret class="icon-caret"/>
-                </div>
-              </td>
-              <td>10</td>
-              <td><span class="chip-gray">Customers</span></td>
-              <td>Juozas Bybosas</td>
+              <td>{{person.potatoes}}</td>
+              <td><span class="chip-gray">Customer</span></td>
+              <td>{{person.name}}</td>
               <td>Lithuania</td>
             </tr>
             </tbody>
           </table>
         </div>
       </div>
+
+      <!-- No data found -->
+      <NoDataFound v-show="people.length <= 0" />
     </section>
   </main>
 
-  <SortingModal :isModalOpen="isModalOpen" @close="closeModal"/>
+  <SortingModal :isModalOpen="isModalOpen" @close="closeModal" @start="startSorting"/>
 </template>
 
 

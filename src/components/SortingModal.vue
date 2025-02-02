@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {defineProps, defineEmits} from 'vue'
+import {defineProps, defineEmits, ref, computed} from 'vue'
 import IconCross from "./icons/IconCross.vue";
 
 // Props to receive `isModalOpen` and control
@@ -8,7 +8,22 @@ defineProps({
 })
 
 // Emits to notify parent when modal closes
-defineEmits(['close'])
+defineEmits(['close', 'start']);
+
+const peopleCount = ref(null);
+const errorMessage = ref('');
+
+// Validation function
+const validateInput = () => {
+  if (peopleCount.value <= 20 || peopleCount.value >= 100) {
+    errorMessage.value = "Accept a number between 20 and 100.";
+  } else {
+    errorMessage.value = "";
+  }
+};
+
+// Disable button if input is invalid
+const isStartDisabled = computed(() => peopleCount.value <= 20 || peopleCount.value >= 100);
 </script>
 
 <template>
@@ -32,16 +47,19 @@ defineEmits(['close'])
           <label id="modal-desc">Enter a number of how many people you want to add to the list.</label>
           <input
               type="number"
-              min="20"
-              max="100"
-              class="w-full p-2 border rounded"
+              min="21"
+              max="99"
+              v-model.number="peopleCount"
+              @input="validateInput"
           />
-          <!--          <div class="text text-warning">How are you?</div>-->
+          <div class="text text-warning" v-if="errorMessage">{{ errorMessage }}</div>
         </div>
       </div>
       <div class="modal-footer">
         <button class="btn" @click="$emit('close')">Cancel</button>
-        <button class="btn primary-btn">Start</button>
+        <button class="btn primary-btn"
+                @click="$emit('start', peopleCount)" :disabled="isStartDisabled">Start
+        </button>
       </div>
     </div>
   </div>
@@ -108,6 +126,11 @@ defineEmits(['close'])
   outline: 2px solid var(--primary-color); /* Add focus outline */
 }
 
+.primary-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 /* Body */
 .modal-body {
   margin-bottom: 1rem;
@@ -128,6 +151,10 @@ defineEmits(['close'])
   padding: 0.5rem;
   border-radius: 0.2rem;
   margin-bottom: 0.5rem;
+}
+
+.input-warning {
+  border-color: var(--primary-color);
 }
 
 /* Footer */
