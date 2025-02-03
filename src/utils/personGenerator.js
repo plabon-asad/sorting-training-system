@@ -1,4 +1,4 @@
-// import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 const firstNames = ['Alex', 'Emma', 'Liam', 'Olivia', 'Noah', 'Ava', 'Ethan', 'Sophia', 'Mason', 'Isabella'];
 const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Miller', 'Davis', 'Garcia', 'Rodriguez', 'Wilson'];
@@ -29,7 +29,7 @@ export function generatePeople(count, maxPotatoes = 1000) {
         usedPotatoes.add(potatoCount);
 
         people.push({
-            // id: uuidv4(),
+            id: uuidv4(),
             name,
             email: generateEmail(name),
             potatoes: potatoCount

@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import {ref, onUnmounted, computed, watch} from "vue";
+import draggable from 'vuedraggable';
+import {generatePeople} from './utils/personGenerator';
 
 import IconCaret from "./components/icons/IconCaret.vue";
 import SortingModal from "./components/SortingModal.vue";
-import {ref, onUnmounted} from "vue";
 import NoDataFound from "./components/NoDataFound.vue";
-import {generatePeople} from './utils/personGenerator';
 
 const isModalOpen = ref(false);
 const people = ref([]);
@@ -28,20 +29,49 @@ const startSorting = (count) => {
 
 // Timer logic
 const timeCount = ref(0);
-let timeOut: number | null = null;
+const timeOut = ref<number | null>(null);
+const emit = defineEmits(['startTimer']);
+const isSorted = ref(false);
 
 const startTimer = () => {
   timeCount.value = 0;
-  if (timeOut) clearInterval(timeOut);
-  timeOut = setInterval(() => {
+  if (timeOut.value) clearInterval(timeOut.value);
+  timeOut.value = setInterval(() => {
     timeCount.value++;
-    emit('startTimer', timeCount.value);
   }, 1000);
 };
 
 const stopTimer = () => {
-  if (timeOut) clearInterval(timeOut);
-}
+  if (timeOut.value) {
+    clearInterval(timeOut.value);
+    timeOut.value = null;
+  }
+};
+
+// Check if list is sorted in descending order
+const checkSorting = () => {
+  const sorted = [...people.value].sort((a, b) => b.potatoes - a.potatoes);
+  if (JSON.stringify(people.value) === JSON.stringify(sorted)) {
+    isSorted.value = true;
+    stopTimer();
+
+    // Auto-check all checkboxes
+    selectedPeople.value = people.value.map(person => person.potatoes);
+  } else {
+    isSorted.value = false;
+    selectedPeople.value = []; // Uncheck if not sorted
+  }
+};
+
+const resetGame = () => {
+  window.location.reload();
+};
+
+// Watch people array & start timer when first dragged
+watch(people, () => {
+  if (!timeOut.value && !isSorted.value) startTimer();
+}, {deep: true});
+
 
 // Cleanup timer when component unmounts
 onUnmounted(() => {
@@ -54,7 +84,11 @@ onUnmounted(() => {
     <div class="container">
       <div class="title-section">
         <h2>Sorting Training System</h2>
-        <button @click="openModal" class="btn primary-btn">Start Sorting!</button>
+        <button
+            v-show="!isSorted"
+            @click="openModal"
+            class="btn primary-btn">Start Sorting!
+        </button>
       </div>
 
     </div>
@@ -64,55 +98,65 @@ onUnmounted(() => {
     <section class="table-card b-shadow">
 
       <div class="table-card-head">
-        <strong v-show="!timeCount">{{people.length}} people in the list</strong>
-        <strong v-show="timeCount" class="chip chip-primary">
-          Time start: {{timeCount}}s
+        <strong v-show="!timeCount">{{ people.length }} people in the list</strong>
+        <strong v-show="timeCount && !isSorted" class="chip chip-primary">
+          Time start: {{ timeCount }}s
         </strong>
-<!--        <button v-show="timeCount" class="btn primary-btn" @click="stopTimer">Stop Timer</button>-->
-<!--        <strong>{{ selectedPeople }}</strong>-->
+        <button v-show="isSorted"
+                @click="resetGame"
+                class="btn primary-btn">Reset Game
+        </button>
+        <!--        <button v-show="timeCount" class="btn primary-btn" @click="stopTimer">Stop Timer</button>-->
+        <!--        <strong>{{ selectedPeople }}</strong>-->
       </div>
 
       <div class="table-card-body" v-show="people.length > 0">
         <div class="table-responsive">
-          <table>
+          <table v-show="!isSorted">
             <thead>
             <tr>
-              <th>Email</th>
-              <th>Potatoes</th>
-              <th>Tags</th>
-              <th>Full Name</th>
-              <th>Location</th>
+              <th scope="col">Email</th>
+              <th scope="col">Potatoes</th>
+              <th scope="col">Tags</th>
+              <th scope="col">Full Name</th>
+              <th scope="col">Location</th>
             </tr>
             </thead>
-            <tbody>
-            <!-- Example row -->
-            <tr v-for="person in people" :key="person.id">
-              <td>
-                <div class="checkbox-wrap">
-                  <div class="checkbox">
-                    <input
-                        v-model="selectedPeople"
-                        type="checkbox"
-                        :id="`person-${person.potatoes}`"
-                        :value="person.potatoes"
-                    />
-                    <label :for="`person-${person.potatoes}`">{{ person.email }}</label>
-                  </div>
-                  <IconCaret class="icon-caret"/>
-                </div>
-              </td>
-              <td>{{person.potatoes}}</td>
-              <td><span class="chip chip-gray">Customer</span></td>
-              <td>{{person.name}}</td>
-              <td>Lithuania</td>
-            </tr>
-            </tbody>
+            <draggable v-model="people" tag="tbody" item-key="id" animation="300" @end="checkSorting">
+              <template #item="{ element }">
+                <tr>
+                  <td>
+                    <div class="checkbox-wrap">
+                      <div class="checkbox">
+                        <input
+                            v-model="selectedPeople"
+                            type="checkbox"
+                            :id="`person-${element.potatoes}`"
+                            :value="element.potatoes"
+                        />
+                        <label :for="`person-${element.potatoes}`">{{ element.email }}</label>
+                      </div>
+                      <IconCaret class="icon-caret"/>
+                    </div>
+                  </td>
+                  <td>{{ element.potatoes }}</td>
+                  <td><span class="chip chip-gray">Customer</span></td>
+                  <td>{{ element.name }}</td>
+                  <td>Lithuania</td>
+                </tr>
+              </template>
+            </draggable>
           </table>
+          <NoDataFound v-show="isSorted"
+                       :message="'🎉 Congratulations! List is sorted! Your Score: ' + timeCount + '.'"/>
+          <!--          <p v-if="isSorted" class="text text-success">-->
+          <!--            🎉 List is sorted! Your time: {{ timeCount }} seconds.-->
+          <!--          </p>-->
         </div>
       </div>
 
       <!-- No data found -->
-      <NoDataFound v-show="people.length <= 0" />
+      <NoDataFound v-show="people.length <= 0"/>
     </section>
   </main>
 
@@ -149,6 +193,7 @@ onUnmounted(() => {
   background-color: white;
   padding-bottom: 3.125rem;
   border-radius: 0.25rem;
+  margin-bottom: 1.5rem;
 }
 
 .table-card-head {
@@ -222,7 +267,10 @@ tbody tr:last-child td {
   margin-right: 0.25rem;
 }
 
-.chip-gray {background-color: var(--chip-gray);}
+.chip-gray {
+  background-color: var(--chip-gray);
+}
+
 .chip-primary {
   background-color: rgba(255, 141, 0, 0.50);
 }

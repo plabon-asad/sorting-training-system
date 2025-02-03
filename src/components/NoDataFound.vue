@@ -1,7 +1,18 @@
-<script setup></script>
+<script setup>
+const props = defineProps({
+  message: {
+    type: String,
+    default: 'No data found to sorting.',
+  },
+  color: {
+    type: String,
+    default: 'var(--primary-color)',
+  },
+});
+</script>
 <template>
-  <div class="no-data">
-    No data found to sorting.
+  <div class="no-data" :style="{ color: color }">
+    {{ message }}
   </div>
 </template>
 <style scoped>
