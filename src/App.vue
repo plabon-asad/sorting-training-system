@@ -2,7 +2,7 @@
 
 import IconCaret from "./components/icons/IconCaret.vue";
 import SortingModal from "./components/SortingModal.vue";
-import {ref} from "vue";
+import {ref, onUnmounted} from "vue";
 import NoDataFound from "./components/NoDataFound.vue";
 import {generatePeople} from './utils/personGenerator';
 
@@ -22,8 +22,31 @@ const closeModal = () => {
 const startSorting = (count) => {
   // debugger
   people.value = generatePeople(count);
+  startTimer();
   closeModal();
 }
+
+// Timer logic
+const timeCount = ref(0);
+let timeOut: number | null = null;
+
+const startTimer = () => {
+  timeCount.value = 0;
+  if (timeOut) clearInterval(timeOut);
+  timeOut = setInterval(() => {
+    timeCount.value++;
+    emit('startTimer', timeCount.value);
+  }, 1000);
+};
+
+const stopTimer = () => {
+  if (timeOut) clearInterval(timeOut);
+}
+
+// Cleanup timer when component unmounts
+onUnmounted(() => {
+  if (timeOut) clearInterval(timeOut);
+});
 </script>
 
 <template>
@@ -41,7 +64,11 @@ const startSorting = (count) => {
     <section class="table-card b-shadow">
 
       <div class="table-card-head">
-        <strong>{{people.length}} people in the list</strong>
+        <strong v-show="!timeCount">{{people.length}} people in the list</strong>
+        <strong v-show="timeCount" class="chip chip-primary">
+          Time start: {{timeCount}}s
+        </strong>
+<!--        <button v-show="timeCount" class="btn primary-btn" @click="stopTimer">Stop Timer</button>-->
 <!--        <strong>{{ selectedPeople }}</strong>-->
       </div>
 
@@ -75,7 +102,7 @@ const startSorting = (count) => {
                 </div>
               </td>
               <td>{{person.potatoes}}</td>
-              <td><span class="chip-gray">Customer</span></td>
+              <td><span class="chip chip-gray">Customer</span></td>
               <td>{{person.name}}</td>
               <td>Lithuania</td>
             </tr>
@@ -185,7 +212,7 @@ tbody tr:last-child td {
   border-bottom: 1px solid var(--border-color);
 }
 
-.chip-gray {
+.chip {
   display: inline-block;
   background-color: var(--chip-gray);
   color: var(--text-table);
@@ -193,6 +220,11 @@ tbody tr:last-child td {
   padding: 0.3rem 0.6rem;
   border-radius: 12px;
   margin-right: 0.25rem;
+}
+
+.chip-gray {background-color: var(--chip-gray);}
+.chip-primary {
+  background-color: rgba(255, 141, 0, 0.50);
 }
 
 .icon-caret {
@@ -270,7 +302,7 @@ tbody tr:last-child td {
     text-align: left;
   }
 
-  .chip-gray {
+  .chip {
     margin-bottom: 0.5rem;
   }
 }

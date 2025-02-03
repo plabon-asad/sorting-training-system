@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, computed} from 'vue'
+import {ref, computed, onUnmounted} from 'vue'
 import IconCross from "./icons/IconCross.vue";
 
 // Props to receive `isModalOpen` and control
@@ -7,8 +7,8 @@ defineProps({
   isModalOpen: Boolean,
 })
 
-// Emits to notify parent when modal closes
-defineEmits(['close', 'start']);
+// Emits to notify parent when modal closes and timer starts
+defineEmits(['close', 'start', 'startTimer']);
 
 const peopleCount = ref(null);
 const errorMessage = ref('');
@@ -24,6 +24,12 @@ const validateInput = () => {
 
 // Disable button if input is invalid
 const isStartDisabled = computed(() => peopleCount.value <= 20 || peopleCount.value >= 100);
+
+
+
+
+
+
 </script>
 
 <template>
